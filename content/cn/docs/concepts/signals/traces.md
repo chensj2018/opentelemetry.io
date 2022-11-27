@@ -1,20 +1,14 @@
 ---
 title: Traces
 description: >-
-  Traces give us the big picture of what happens when a request is made by user
-  or an application.
+  Traces给了我们一个请求内部发生了什么的全局视图，这些请求有来自用户或应用程序。
 weight: 1
 ---
-
 ## Tracing in OpenTelemetry
 
-[**Traces**](/docs/concepts/observability-primer/#distributed-traces) give us
-the big picture of what happens when a request is made by user or an
-application. OpenTelemetry provides us with a way to implement Observability
-into our code in production by tracing our microservices and related
-applications.
+[**Traces**](/docs/concepts/observability-primer/#distributed-traces) 给了我们一个请求内部发生了什么的全局视图，这些请求有来自用户或应用程序。通过trace微服务和相关应用程序，OpenTelemetry提供了一种将可观测性的引入到产品代码中的实现方式。
 
-Sample Trace:
+Trace示例:
 
 ```json
 {
@@ -92,13 +86,10 @@ Sample Trace:
 }
 ```
 
-This sample trace output has three items, named "Hello-Greetings",
-"Hello-Salutations" and "Hello". Because each request's context has the same
-trace ID, all of the information can be tied together. This provides a trail
-through the requests' various routes, timestamps and other attributes.
+这个示例中有三个子项，名字分别为： "Hello-Greetings",
+"Hello-Salutations" 和 "Hello"。因为每个请求的上下文(context)里有相同的Trace ID，所以所有信息都可以整合到一起。通过请求的路由、时间戳和其他属性，得到一个完整的线索。
 
-To understand how tracing in OpenTelemetry works, let's look at a list of
-components that will play a part in instrumenting our code:
+为了理解在OpenTelemetry中trace是如何工作的，让我们来看一下组成trace的组件列表:
 
 - Tracer
 - Tracer Provider
@@ -107,84 +98,49 @@ components that will play a part in instrumenting our code:
 
 ### Tracer Provider
 
-A Tracer Provider (sometimes called `TracerProvider`) is a factory for
-`Tracer`s. In most applications, a Tracer Provider is initialized once and its
-lifecycle matches the application's lifecycle. Tracer Provider initialization
-also includes Resource and Exporter initialization. It is typically the first
-step in tracing with OpenTelemetry. In some language SDKs, a global Tracer
-Provider is already initialized for you.
+Tracer Provider (有时称为 `TracerProvider`)是一个 `Tracer`的工厂。在大多数应用程序中，Tracer Provider只被初始化一次，生命周期和应用程序相同。同时资源和Exporter的初始化也包含在Tracer Provider的初始化之中，通常这是OpenTelemetry 中Trace初始化的第一步。在某些语言SDK中，一个全局的Tracer Provider已经为你初始化好了。
 
 ### Tracer
 
-A Tracer creates spans containing more information about what is happening for a
-given operation, such as a request in a service. Tracers are created from Tracer
-Providers. In some languages, a global Tracer is already initialized for you.
+Tracer创建包含更多信息的span，这些信息描述了特定操作发生了什么，例如一个service的请求。Tracer由Tracer Provider创建。在某些语言中，一个全局的Tracer已经为你初始化好了。
 
 ### Trace Exporters
 
-Trace Exporters send traces to a consumer. This consumer can be standard output
-for debugging and development-time, the OpenTelemetry Collector, or any
-open source or vendor backend of your choice.
+Trace Exporters发送trace信息到消费者， 这些消费者是为了调试和开发目的的标准输出，如OpenTelemetry Collector，任何开源或商用的back-end。
 
 ### Trace Context
 
-Trace Context is metadata about trace spans that provides correlation between
-spans across service and process boundaries. For example, let's say that Service
-A calls Service B and you want to track the call in a trace. In that case,
-OpenTelemetry will use Trace Context to capture the ID of the trace and current
-span from Service A, so that spans created in Service B can connect and add to
-the trace.
+Trace Context是span的元数据，提供跨service和进程边界的span之间的联系信息。例如，A service调用了B service，同时我们想用trace机制跟踪这些调用。在这种情况下，OpenTelemetry将使用Trace Context封装trace和当前A service的span的ID，所以在Sevice B中创建的span能够连接和添加到trace中。
 
-This is known as Context Propagation.
+这就是著名的Context Propagation。
 
 ### Context Propagation
 
-Context Propagation is the core concept that enables Distributed Tracing. With
-Context Propagation, Spans can be correlated with each other and assembled into
-a trace, regardless of where Spans are generated. We define Context Propagation
-by two sub-concepts: Context and Propagation.
+Context Propagation是使能分布式Tracing的核心概念。通过context Propagation，能够将span彼此关联起来，组成一个trace，无论这些span是哪里产生的。我们通过Context和Propagation两个子概念定义Context Propagation。
 
-A **Context** is an object that contains the information for the sending and
-receiving service to correlate one span with another and associate it with the
-trace overall.
+**Context** 是一个对象，包含发送和接收service的信息，用于将一个span和另外一个span关联起来，从而形成一个全局trace。
 
-**Propagation** is the mechanism that moves Context between services and
-processes. By doing so, it assembles a Distributed Trace. It serializes or
-deserializes Span Context and provides the relevant Trace information to be
-propagated from one service to another. We now have what we call: **Trace
-Context**.
+**Propagation** 是一种在service或进程之间传播context机制。通过这种机制，实现分布式trace的组装。它序列化和反序列化span contex，从一个service到另外一个service传播trace相关的信息。我们现在称之为：**Trace Context**。
 
-There are other forms of Context in OpenTelemetry. For example, some Context is
-an implementation of the W3C `TraceContext` specification on spans, and in
-OpenTelemetry, this is called **`SpanContext`**.
+在OpenTelemetry中，有另外一种形式的Context。例如，某个context是W3C `TraceContext`规范在span上的实现，在OpenTelemetry中称之为 `SpanContext`。
 
-We identify Span Context using four major components: a **`traceID`** and
-**`spanID`**, **Trace Flags**, and **Trace State**.
+我们识别Span Context使用四个主要部分：`traceID`、`spanID`、**Trace Flags**和 **Trace State**。
 
-**`traceID`** - A unique 16-byte array to identify the trace that a span is
-associated with
+**`traceID`** - 一个唯一的16-byte数组，用于标识span所属的trace。
 
-**`spanID`** - Hex-encoded 8-byte array to identify the current span
+**`spanID`** - 十六进制编码的8-byte数组，用于标识当前span。
 
-**Trace Flags** - Provides more details about the trace, such as if it is
-sampled
+**Trace Flags** - 提供更多有关trace的细节信息，例如它的采样。
 
-**Trace State** - Provides more vendor-specific information for tracing across
-multiple distributed systems. Please refer to
-[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags) for
-further explanation.
+**Trace State** - 提供更多供应商信息，用于trace多个分布式系统。更多信息请参阅[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags) 。
 
-By combining Context and Propagation, you now can assemble a Trace.
+通过结合Context和Propagation，你现在可以组装一个trace了。
 
-> For more information, see the [traces specification][]
-
-[traces specification]: /docs/reference/specification/overview/#tracing-signal
+> 更多信息, 请参阅 [traces 规范][traces specification]
 
 ## Spans in OpenTelemetry
 
-A [**Span**](/docs/concepts/observability-primer/#spans) represents a unit of
-work or operation. Spans are the building blocks of Traces. In OpenTelemetry,
-they include the following information:
+一个[**Span**](/docs/concepts/observability-primer/#spans) 代表一个工作或操作单元，是构建trace的模块。在OpenTelemetry中，包括如下信息：
 
 - Name
 - Parent span ID (empty for root spans)
@@ -195,7 +151,7 @@ they include the following information:
 - [Span Links](#span-links)
 - [Span Status](#span-status)
 
-Sample Span:
+Span示例:
 
 ```json
 {
@@ -232,135 +188,95 @@ Sample Span:
 }
 ```
 
-Spans can be nested, as is implied by the presence of a parent span ID:
-child spans represent sub-operations. This allows spans to more accurately
-capture the work done in an application.
+Spans能够嵌套，通过父span ID的形式实现：子span代表子操作。这允许span捕获在应用程序更精确的工作内容。
 
 ### Span Context
 
-Span Context is an immutable object on every span that contains the following:
+Span Context在每个span中是一个不可变的对象，包含如下 内容：
 
-* The Trace ID representing the trace that the span is a part of
-* The Span's Span ID
-* Trace Flags, a binary encoding containing information about the trace
-* Trace State, a list of key-value pairs that can carry vendor-specific trace
-  information
+* Trace ID，表示这个span所属的trace
+* Span's Span ID
+* Trace Flags，一个二进制编码，包含这个trace有关的信息
+* Trace State，一个k-v列表，包含供应商相关的trace信息
 
-Span Context is the part of a span that is serialized and propagated alongside
-[Distributed Context](#context-propagation) and [Baggage](/docs/concepts/signals/baggage).
+Span Context作为span的一部分，将被序列化和伴随[Distributed Context](#context-propagation) 和 [Baggage](/docs/concepts/signals/baggage)传播。
 
-Because Span Context contains the Trace ID, it is used when creating
-[Span Links](#span-links).
+因为Span Context包含Trace ID，它将在创建[Span Links](#span-links)时使用。
 
 ### Attributes
 
-Attributes are key-value pairs that contain metadata that you can use to
-annotate a Span to carry information about the operation it is tracking.
+Attributes是一组包含元数据的k-v对，这些信息被用于携带与track操作有关的信息。
 
-For example, if a span tracks an operation that adds an item to a user's
-shopping cart in an eCommerce system, you can capture the user's ID, the ID of
-the item to add to the cart, and the cart ID.
+例如，如果一个span是跟踪电子商务系统中一个添加用户购物车的操作，可以捕获：用户ID、商品ID和购物车ID。
 
-Attributes have the following rules that each language SDK implements:
+无论是哪种语言的SDK实现，Attributes有如下规则：
 
-* Keys must be non-null string values
-* Values must be a non-null string, boolean, floating point value, integer, or
-  an array of these values
+* Keys必须是non-null字符串
+* Values必须是non-null字符串、boolean、floating、integer或者这些值的数组
 
-Additionally, there are
-[Semantic Attributes](/docs/reference/specification/trace/semantic_conventions/),
-which are known naming conventions for metadata that is typically present in
-common operations. It's helpful to use semantic attribute naming wherever
-possible so that common kinds of metadata are standardized across systems.
+另外，还有
+[语义属性](/docs/reference/specification/trace/semantic_conventions/)，即通常能表示操作含义的元数据命名约定。这将有助于在各系统之间标准化这些属性。
 
 ### Span Events
 
-A Span Event can be thought of as a structured log message (or annotation) on a
-Span, typically used to denote a meaningful, singular point in time during the
-Span's duration.
+Span Event可以看作结构化的日志消息（或注解），通常用来表示在span的持续期间内一个有意义的、 单个时间点。
 
-For example, consider two scenarios in a web browser:
+例如，考虑在web浏览器的两个场景：
 
-1. Tracking a page load
-2. Denoting when a page becomes interactive
+1. 跟踪网页的加载
+2. 表示网页变成交互模式
 
-A Span is best used to the first scenario because it's an operation with a start
-and an end.
+Span最好被用于第一种场景，因为这个操作有带有开始和结束时间。
 
-A Span Event is best used to track the second scenario because it represents a
-meaningful, singular point in time.
+一个Span Event最好被用于跟踪第二种场景，因为它是一个用意义的、单个时间点。
 
 ### Span Links
 
-Links exist so that you can associate one span with one or more spans, implying
-a causal relationship. For example, let’s say we have a distributed system where
-some operations are tracked by a trace.
+Links能够将一个span关联到一个或多个span，这意味着因果关系。 例如，通过trace确定跟踪一个分布式系统中的哪些操作。
 
-In response to some of these operations, an additional operation is queued to be
-executed, but its execution is asynchronous. We can track this subsequent
-operation with a trace as well.
+在处理一些操作的响应中，往往用一个队列实现异步处理。通过Link我们可以很好地跟踪这些后续操作。
 
-We would like to associate the trace for the subsequent operations with the
-first trace, but we cannot predict when the subsequent operations will start. We
-need to associate these two traces, so we will use a span link.
+我们希望这些后续操作与第一个trace关联，但是我们无法预测这些后续操作什么时候开始。我需要关联这两个trace，所以这是我们使用span link。
 
-You can link the last span from the first trace to the first span in the second
-trace. Now, they are causally associated with one another.
+你可以连接第一个trace的最后一个span，到第二trace的第一个span。现在它们被有因果关系的关联到了一起。
 
-Links are optional but serve as a good way to associate trace spans with one
-another.
+Links是虽然可选项，但是它是实现span彼此关联的很好方式。
 
 ### Span Status
 
-A status will be attached to a span. Typically, you will set a span status when
-there is a known error in the application code, such as an exception. A Span
-Status will be tagged as one of the following values:
+状态将被附加到一个span上。通常，当应用程序发生了一个已知的错误（例如异常）时，将设置span的状态。状态的取值范围如下：
 
 - `Unset`
 - `Ok`
 - `Error`
 
-When an exception is handled, a Span status can be set to Error. Otherwise, a
-Span status is in the Unset state. By setting a Span status to Unset, the
-back-end that processes spans can now assign a final status.
+当处理了一个异常，span状态被设置成 `Error`，否则为 `Unset`。当设置为 `Unset`状态，处理span的back-end将为该span指定一个最终状态。
 
 ### Span Kind
 
-When a span is created, it is one of `Client`, `Server`, `Internal`, `Producer`,
-or `Consumer`. This span kind provides a hint to the tracing backend as to how
-the trace should be assembled. According to the OpenTelemetry specification, the
-parent of a server span is often a remote client span, and the child of a client
-span is usually a server span. Similarly, the parent of a consumer span is
-always a producer and the child of a producer span is always a consumer. If not
-provided, the span kind is assumed to be internal.
+当一个span被创建，它将是 `Client`, `Server`, `Internal`, `Producer`,
+或 `Consumer`中的一个。这个span kind用于提示back-end如何组装这个span。根据OpenTelemetry规范，一个 `server span`的父span经常是远端的 `client span`。类似地，一个 `consumer span`的父span总是一个 `producer`，这个 `producer`的子span总是 `consumer`。如果没有指定，span kind被认为是 `internal`。
 
-For more information regarding SpanKind, see
-[SpanKind]({{< relref "/docs/reference/specification/trace/api#spankind" >}}).
+有关span kind的更多信息，请参阅[SpanKind]({{< relref "/docs/reference/specification/trace/api#spankind" >}}).
 
 #### Client
 
-A client span represents a synchronous outgoing remote call such as an outgoing
-HTTP request or database call. Note that in this context, "synchronous" does not
-refer to `async/await`, but to the fact that it is not queued for later processing.
+client span表示一个同步远程输出调用，例如一个HTTP请求或数据库调用。注意这里的“同步”不涉及 `async/await`，是指不能放入队列中后续处理。
 
 #### Server
 
-A server span represents a synchronous incoming remote call such as an incoming
-HTTP request or remote procedure call.
+server span表示一个同步远程的输入调用，例如HTTP请求或远程调用。
 
 #### Internal
 
-Internal spans represent operations which do not cross a process boundary.
-Things like instrumenting a function call or an express middleware may use
-internal spans.
+Internal spans表示操作没有跨越进程边界。例如，函数调用或者中间件使用的内部span。
 
 #### Producer
 
-Producer spans represent the creation of a job which may be asynchronously
-processed later. It may be a remote job such as one inserted into a job queue or
-a local job handled by an event listener.
+Producer spans表示任务的创建，也许后续处理的异步任务。这也许是一个远程任务，例如插入一个任务队列或通过事件监听器处理本地任务。
 
 #### Consumer
 
-Consumer spans represent the processing of a job created by a producer and may
-start long after the producer span has already ended.
+Consumer spans表示任务的处理，而且有可能在producer已经结束以后才开始。
+
+[traces规范]: /docs/reference/specification/overview/#tracing-signal

@@ -1,52 +1,31 @@
 ---
 title: "Metrics"
 description: >-
-  A metric is a measurement about a service, captured at runtime.
+  metric是对service的测量，在运行时捕获。
 weight: 2
 ---
+**metric** 是对service的测量，在运行时捕获。从逻辑上讲，这些测量的捕获时刻称之为*metric event*，由测量值本身以及捕获的时间戳和相关的元数据。
 
-A **metric** is a measurement about a service, captured at runtime. Logically,
-the moment of capturing one of these measurements is known as a _metric event_
-which consists not only of the measurement itself, but the time that it was
-captured and associated metadata.
+应用程序和请求的metric是重要的可用性和性能的重要指标。自定义metric能够提供如何影响用户体验和业务的洞察。被收集的这些数据能被用于产生告警，或触发调度决策以实现高度自治的自动扩缩容。
 
-Application and request metrics are important indicators of availability and
-performance. Custom metrics can provide insights into how availability
-indicators impact user experience or the business. Collected data can be used to
-alert of an outage or trigger scheduling decisions to scale up a deployment
-automatically upon high demand.
+今天OpenTelemetry定义了三种 _metric instruments_ :
 
-OpenTelemetry defines three _metric instruments_ today:
+- **counter**: 随着时间增加的值 -- 可用想象为汽车的里程表，它只能不断增加。
+- **measure**: 随着时间聚集的值，这不像汽车里程表，而是表示一定范围内的值。
+- **observer**: 在某个时间点上捕获的一组值。就像汽车里的燃油表。
 
-- **counter**: a value that is summed over time -- you can think of this like an
-  odometer on a car; it only ever goes up.
-- **measure**: a value that is aggregated over time. This is more akin to the
-  trip odometer on a car, it represents a value over some defined range.
-- **observer**: captures a current set of values at a particular point in time,
-  like a fuel gauge in a vehicle.
+除了在这三个metric指标以外，_aggregations_ 也是理解metric的一个重要的概念。aggregation是一种技术，将在发生metric事件的时间窗口内的大量测量数据，合并成精确或估计的统计数值。OpenTelemetry API本身不允许指定这些聚合，但提供了一些默认值。通常，OpenTelemetry SDK提供常见的聚合（例如：求和、计数、最新值和直方图），它们被可视化工具和遥测back-end支持。
 
-In addition to the three metric instruments, the concept of _aggregations_ is an
-important one to understand. An aggregation is a technique whereby a large
-number of measurements are combined into either exact or estimated statistics
-about metric events that took place during a time window. The OpenTelemetry API
-itself does not allow you to specify these aggregations, but provides some
-default ones. In general, the OpenTelemetry SDK provides for common aggregations
-(such as sum, count, last value, and histograms) that are supported by
-visualizers and telemetry backends.
+不同于请求的tracing（其目的在于捕获请求的生命周期和提供请求各部分独立的上下文），metrics目的在于提供聚合的统计信息。使用metric的例子包括：
 
-Unlike request tracing, which is intended to capture request lifecycles and
-provide context to the individual pieces of a request, metrics are intended to
-provide statistical information in aggregate. Some examples of use cases for
-metrics include:
+- 报告一个service每种协议类型，读取字节的总数。
+- 报告读取字节的总数和每个请求的字节数。
+- 报告一个系统调用持续的时间。
+- 报告请求的大小，以确定趋势。
+- 报告某个进程CPU或内存的使用率。
+- 报告一个账户平均余额。
+- 报告当前正在被处理的活跃请求数量。
 
-- Reporting the total number of bytes read by a service, per protocol type.
-- Reporting the total number of bytes read and the bytes per request.
-- Reporting the duration of a system call.
-- Reporting request sizes in order to determine a trend.
-- Reporting CPU or memory usage of a process.
-- Reporting average balance values from an account.
-- Reporting current active requests being handled.
-
-> For more information, see the [metrics specification][].
+> 更多信息，请参见[metrics specification][metrics specification].
 
 [metrics specification]: /docs/reference/specification/overview/#metric-signal
