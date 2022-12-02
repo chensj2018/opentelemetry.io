@@ -1,61 +1,42 @@
 ---
 title: "Data Collection"
 description: >-
-  The OpenTelemetry project facilitates the collection of telemetry data via the OpenTelemetry Collector
+  OpenTelemetry项目通过Collector使收集远程监测数据变得容易
 weight: 50
 ---
+OpenTelemetry项目通过Collector使收集远程监测数据变得容易。OpenTelemetry Collector提供了与厂商无关的实现，包括如何接收、处理、导出远程监测数据。使得不用运行、操作和维护多个agent/collector，以便支持多种数据格式（例如Jaeger，Prometheus等）发送到一个或多个开源或商业的back-end。另外，Collector为终端用户提供控制数据的途径。监测库默认将远程监测数据导出到Collector。
 
-The OpenTelemetry project facilitates the collection of telemetry data via the
-OpenTelemetry Collector. The OpenTelemetry Collector offers a vendor-agnostic
-implementation on how to receive, process, and export telemetry data. It removes
-the need to run, operate, and maintain multiple agents/collectors in order to
-support open source observability data formats (e.g. Jaeger, Prometheus, etc.)
-sending to one or more open source or commercial back-ends. In addition, the
-Collector gives end-users control of their data. The Collector is the default
-location instrumentation libraries export their telemetry data.
+> Collector也许是一个分布式系统，更多信息请查看[这里](../distributions)。
 
-> The Collector may be offered as a distribution, see [here](../distributions)
-> for more information.
+## 部署
 
-## Deployment
+OpenTelemetry Collector提供了单一的二进制文件和两种部署方式：
 
-The OpenTelemetry Collector provides a single binary and two deployment methods:
+- **Agent:** 一个Collector实例，与应用程序同时运行或在相同主机上（例如，二进制，sidecar或daemonset）。
+- **Gateway:** 作为独立服务的一个或多个Collector实例(例如，容器或deployment) ，通常每个集群，数据中心或区域部署一个。
 
-- **Agent:** A Collector instance running with the application or on the same
-  host as the application (e.g. binary, sidecar, or daemonset).
-- **Gateway:** One or more Collector instances running as a standalone service
-  (e.g. container or deployment) typically per cluster, data center or region.
+有关如何使用Collector的更多信息，请参阅[getting started documentation](/docs/collector/getting-started).
 
-For information on how to use the Collector see the
-[getting started documentation](/docs/collector/getting-started).
+## 组件
 
-## Components
-
-The Collector is made up of the following components:
+Collector由下面这些组件组成：
 
 - <img width="32" src="https://raw.github.com/open-telemetry/opentelemetry.io/main/iconography/32x32/Receivers.svg"></img>
-  `receivers`: How to get data into the Collector; these can be push or pull
-  based
+  `receivers`: 实现Collector如何收集数据;支持push和pull
 - <img width="32" src="https://raw.github.com/open-telemetry/opentelemetry.io/main/iconography/32x32/Processors.svg"></img>
-  `processors`: What to do with received data
+  `processors`: 实现怎么处理接收到的数据
 - <img width="32" src="https://raw.github.com/open-telemetry/opentelemetry.io/main/iconography/32x32/Exporters.svg"></img>
-  `exporters`: Where to send received data; these can be push or pull based
+  `exporters`: 实现将收到的数据发送到哪里；支持push和pull
 
-These components are enabled through `pipelines`. Multiple instances of
-components as well as pipelines can be defined via YAML configuration.
+通过 ` pipelines`使能这些组件，使用yaml配置将多个组件实例配置成一个 ` pipeline`  。
 
-For more information about these components see the
-[configuration documentation](/docs/collector/configuration).
+有关组件的更多信息，请参阅[configuration documentation](/docs/collector/configuration).
 
-## Repositories
+## 制品库
 
-The OpenTelemetry project provides two versions of the Collector:
+OpenTelemetry项目提供了两个版本的Collector：
 
 - **[Core](https://github.com/open-telemetry/opentelemetry-collector/releases):**
-  Foundational components such as configuration and generally applicable
-  receivers, processors, exporters, and extensions.
+  基础组件，例如配置，常用的receivers, processors, exporters, and extensions.
 - **[Contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib/releases):**
-  All the components of core plus optional or possibly experimental components.
-  Offers support for popular open source projects including Jaeger, Prometheus,
-  and Fluent Bit. Also contains more specialized or vendor-specific receivers,
-  processors, exporters, and extensions.
+  所有核心组件，加上可选的或可能实验性的组件。为流行的开源项目（包括Jaeger，Prometheus和Fluent Bit）提供支持。也包括更多专用的或商业的receivers,processors, exporters, and extensions。
