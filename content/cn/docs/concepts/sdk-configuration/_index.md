@@ -2,5 +2,4 @@
 title: SDK Configuration
 weight: 51
 ---
-
-OpenTelemetry SDKs support configuration in each language and with environment variables. The following pages describe the environment variables you can use to configure your SDK. Values set with environment variables override equivalent configuration done in code using SDK APIs.
+OpenTelemetry SDKs每种编程语言支持的配置和环境变量。接下来的页面描述了配置SDK所使用的环境变量。使用环境变量设置的值，将覆盖在代码中使用SDK API设置的值。

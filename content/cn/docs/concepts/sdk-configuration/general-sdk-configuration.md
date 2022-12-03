@@ -4,49 +4,41 @@ description: >-
  General-purpose environment variables for configuring an OpenTelemetry SDK.
 weight: 1
 ---
-
 ## `OTEL_SERVICE_NAME`
 
-Sets the value of the
-[`service.name`](/docs/reference/specification/resource/semantic_conventions/#service) resource
-attribute.
+设置资源属性[`service.name`](/docs/reference/specification/resource/semantic_conventions/#service) 的名字。
 
-**Default value:** `"unknown_service"`
+**默认值:** `"unknown_service"`
 
-If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then
-`OTEL_SERVICE_NAME` takes precedence.
+如果 `service.name` 在 `OTEL_RESOURCE_ATTRIBUTES`里提供, 环境变量 `OTEL_SERVICE_NAME` 将被采用。
 
-**Example:**
+**示例:**
 
 `export OTEL_SERVICE_NAME="your-service-name"`
 
 ## `OTEL_RESOURCE_ATTRIBUTES`
 
-Key-value pairs to be used as resource attributes. See [Resource
-SDK](/docs/reference/specification/resource/sdk#specifying-resource-information-via-an-environment-variable)
-for more details.
+被用于资源属性的Key-value键值对。更多信息，参见 [Resource SDK](/docs/reference/specification/resource/sdk#specifying-resource-information-via-an-environment-variable)。
 
-**Default value:** Empty.
+**默认值:** Empty.
 
-See [Resource semantic
-conventions](/docs/reference/specification/resource/semantic_conventions/#semantic-attributes-with-sdk-provided-default-value)
-for semantic conventions to follow for common resource types.
+普通资源类型遵循的语义规范，参见 [Resource semantic conventions](/docs/reference/specification/resource/semantic_conventions/#semantic-attributes-with-sdk-provided-default-value)
 
-**Example:**
+**示例:**
 
 `export OTEL_RESOURCE_ATTRIBUTES="key1=value1,key2=value2"`
 
 ## `OTEL_TRACES_SAMPLER`
 
-Specifies the Sampler used to sample traces by the SDK.
+指定SDK使用的采样器。
 
-**Default value:** `"parentbased_always_on"`
+**默认值:** `"parentbased_always_on"`
 
-**Example:**
+**示例:**
 
 `export OTEL_TRACES_SAMPLER="traceidratio"`
 
-Accepted values for `OTEL_TRACES_SAMPLER` are:
+ `OTEL_TRACES_SAMPLER` 取值范围如下:
 
 - `"always_on"`: `AlwaysOnSampler`
 - `"always_off"`: `AlwaysOffSampler`
@@ -62,48 +54,34 @@ Accepted values for `OTEL_TRACES_SAMPLER` are:
 
 ## `OTEL_TRACES_SAMPLER_ARG`
 
-Specifies arguments, if applicable, to the sampler defined in by
-`OTEL_TRACES_SAMPLER`. The specified value will only be used if
-`OTEL_TRACES_SAMPLER` is set. Each Sampler type defines its own expected input,
-if any. Invalid or unrecognized input is logged as an error.
+如果 `OTEL_TRACES_SAMPLER`的采样器可用，通过该环境变量指定采样器所需的参数。该值只能被 `OTEL_TRACES_SAMPLER` 使用。每种采样器类型都有其期望的输入参数。无效或不可识别的输入参数将记录错误日志。
 
-**Default value:** Empty.
+**默认值:** Empty.
 
-**Example:**
+**示例:**
 
 ```shell
 export OTEL_TRACES_SAMPLER="traceidratio"
 export OTEL_TRACES_SAMPLER_ARG="0.5"
 ```
 
-Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may
-be set as follows:
+依赖于 `OTEL_TRACES_SAMPLER`设置的值， `OTEL_TRACES_SAMPLER_ARG` 也许被设置为如下值：
 
-- For `traceidratio` and `parentbased_traceidratio` samplers: Sampling
-  probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if
-  unset.
-- For `jaeger_remote` and `parentbased_jaeger_remote`: The value is a comma
-  separated list:
-  - Example:
+- 对于 `traceidratio` 和 `parentbased_traceidratio` ：采样概率，取值的[0..1]之间，例如"0.25"。默认值为1.0。
+- 对于 `jaeger_remote` 和 `parentbased_jaeger_remote`: 是","分隔的列表：
+  - 例如:
     `"endpoint=http://localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25"`
-  - `endpoint`: the endpoint in form of `scheme://host:port` of gRPC server that
-    serves the sampling strategy for the service
-    ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto)).
-  - `pollingIntervalMs`:  in milliseconds indicating how often the sampler will
-    poll the backend for updates to sampling strategy.
-  - `initialSamplingRate`:  in the [0..1] range, which is used as the sampling
-    probability when the backend cannot be reached to retrieve a sampling
-    strategy. This value stops having an effect once a sampling strategy is
-    retrieved successfully, as the remote strategy will be used until a new
-    update is retrieved.
+  - `endpoint`: gRPC服务端 `scheme://host:port`形式的接入点，该gPRC服务端提供服务的采样策略([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto))。
+  - `pollingIntervalMs`:  单位毫秒，指示采样器从后端更新采样策略的频率。
+  - `initialSamplingRate`:  取值在 [0..1]之间，当后端不可用时使用的采样概率。一旦从后端获取到了采样策略，该值的作用将失效，从后端获取的策略将一直使用到下一次更新。
 
 ## `OTEL_PROPAGATORS`
 
-Specifies Propagators to be used in a comma-separated list.
+指定使用的Propagators，是通过","分隔的列表。 
 
-**Default value:** `"tracecontext,baggage"
+**默认值:** `"tracecontext,baggage"
 
-**Example:**
+**示例:**
 
 `export OTEL_PROPAGATORS="b3"`
 
@@ -113,61 +91,60 @@ Accepted values for `OTEL_PROPAGATORS` are:
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
 - `"b3"`: [B3 Single](/docs/reference/specification/context/api-propagators#configuration)
 - `"b3multi"`: [B3 Multi](/docs/reference/specification/context/api-propagators#configuration)
-- `"jaeger"`:
-  [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
+- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS
   X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader)
   (_third party_)
 - `"ottrace"`: [OT
   Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
-- `"none"`: No automatically configured propagator.
+- `"none"`: 没有配置自动propagator.
 
 ## `OTEL_TRACES_EXPORTER`
 
-Specifies which exporter is used for traces.
+指定trace使用的exporter。
 
-**Default value:** `"otlp"`
+**默认值:** `"otlp"`
 
-**Example:**
+**示例:**
 
 `export OTEL_TRACES_EXPORTER="jaeger"`
 
-Accepted values for are:
+取值范围如下：
 
 - `"otlp"`: [OTLP][spec-otlp]
-- `"jaeger"`: export in Jaeger data model
+- `"jaeger"`: 导出Jaeger数据格式
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/)
-- `"none"`: No automatically configured exporter for traces.
+- `"none"`:没有配置Exporter
 
 ## `OTEL_METRICS_EXPORTER`
 
-Specifies which exporter is used for metrics.
+指定metrics的exporter
 
-**Default value:** `"otlp"`
+**默认值:** `"otlp"`
 
-**Example:**
+**示例:**
 
 `export OTEL_METRICS_EXPORTER="prometheus"`
 
-Accepted values for `OTEL_METRICS_EXPORTER` are:
+ `OTEL_METRICS_EXPORTER` 的取值范围如下：
 
 - `"otlp"`: [OTLP][spec-otlp]
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
-- `"none"`: No automatically configured exporter for metrics.
+- `"none"`: 没有配置 metrics的exporter
 
 ## `OTEL_LOGS_EXPORTER`
 
-Specifies which exporter is used for logs.
+指定logs使用的exporter
 
-**Default value:** `"otlp"`
+**默认值:** `"otlp"`
 
-**Example:**
+**示例:**
 
 `export OTEL_LOGS_EXPORTER="otlp"`
 
-Accepted values for `OTEL_LOGS_EXPORTER` are:
+ `OTEL_LOGS_EXPORTER` 取值范围:
 
 - `"otlp"`: [OTLP][spec-otlp]
-- `"none"`: No automatically configured exporter for logs.
+- `"none"`: 没有配置logs的exporter
 
 [spec-otlp]: /docs/reference/specification/protocol/otlp

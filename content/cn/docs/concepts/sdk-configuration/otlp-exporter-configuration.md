@@ -1,34 +1,28 @@
 ---
-title: "OTLP Exporter Configuration"
+依赖于SDK，但是通常是 `http/protobuf` 或 `grpc`依赖于SDK，但是通常是 `http/protobuf` 或 `grpc`title: "OTLP Exporter Configuration"
 description: >-
- Environment variables for configuring your OTLP Exporter.
+ 配置OTLP Exporter的环境变量
 weight: 2
 ---
-
 ## Endpoint Configuration
 
-The following environment variables let you configure an OTLP/gRPC or OTLP/HTTP
-endpoint for your traces, metrics, and logs.
+通过下面的环境变量，可以配置OTLP/gRPC或OTLP/HTTP的接入点，这些接入点用于traces, metrics, and logs。
 
 ### `OTEL_EXPORTER_OTLP_ENDPOINT`
 
-A base endpoint URL for any signal type, with an optionally-specified port
-number. Helpful for when you're sending more than one signal to the same
-endpoint and want one environment variable to control the endpoint.
+用于任何signal类型的基本endpoint URL，有助于将多个signal发送到相同的endpoint，而且希望使用一个环境变量控制这个endpoint。
 
-**Default value:**
+**默认值:**
 
 * gRPC: `"http://localhost:4317"`
 * HTTP: `"http://localhost:4318"`
 
-**Example:**
+**示例:**
 
 * gRPC: `export OTEL_EXPORTER_OTLP_ENDPOINT="my-api-endpoint:443"`
 * HTTP: `export OTEL_EXPORTER_OTLP_ENDPOINT="http://my-api-endpoint/"`
 
-For OTLP/HTTP, exporters in the SDK construct signal-specific URLs when this
-environment variable is set. This means that if you're sending traces, metrics,
-and logs, the following URLS are constructed from the example above:
+对于OTLP/HTTP，当该环境变量被设置SDK中的exporters将构建与signal相关的URLs。这意味着将发送traces，metrics和log到如下的URLs：
 
 * Traces: `"http://my-api-endpoint/v1/traces"`
 * Metrics: `"http://my-api-endpoint/v1/metrics"`
@@ -36,152 +30,145 @@ and logs, the following URLS are constructed from the example above:
 
 ### `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`
 
-Endpoint URL for trace data only, with an optionally-specified port number. Must
-end with `v1/traces` if using OTLP/HTTP.
+trace数据的Endpoint URL。如果是OTLP/HTTP必须是以 `v1/traces`结尾。
 
-**Default value:**
+**默认值:**
 
 * gRPC: `"http://localhost:4317"`
 * HTTP: `"http://localhost:4318/v1/traces"`
 
-**Example:**
+**示例:**
 
 * gRPC: `export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="my-api-endpoint:443"`
 * HTTP:`export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="http://my-api-endpoint/v1/traces"`
 
 ### `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
 
-Endpoint URL for metric data only, with an optionally-specified port number. Must
-end with `v1/metrics` if using OTLP/HTTP.
+metric数据的Endpoint URL，如果是OTLP/HTTP必须是以 `v1/metrics`结尾。
 
-**Default value:**
+**默认值:**
 
 * gRPC: `"http://localhost:4317"`
 * HTTP: `"http://localhost:4318/v1/metrics"`
 
-**Example:**
+**示例:**
 
 * gRPC: `export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT="my-api-endpoint:443"`
 * HTTP:`export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT="http://my-api-endpoint/v1/metrics"`
 
 ### `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`
 
-Endpoint URL for log data only, with an optionally-specified port number. Must
-end with `v1/logs` if using OTLP/HTTP.
+log数据的Endpoint URL，如果是OTLP/HTTP必须是以 `v1/logs`结尾。
 
-**Default value:**
+**默认值:**
 
 * gRPC: `"http://localhost:4317"`
 * HTTP: `"http://localhost:4318/v1/logs"`
 
-**Example:**
+**示例:**
 
 * gRPC: `export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="my-api-endpoint:443"`
 * HTTP:`export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="http://my-api-endpoint/v1/logs"`
 
 ## Header configuration
 
-The following environment variables let you configure additional headers as a
-list of key-value pairs to add in outgoing gRPC or HTTP requests
+通过下面的环境变量，可以在gRPC或HTTP请求header中配置额外的key-value键值对。
 
 ### `OTEL_EXPORTER_OTLP_HEADERS`
 
-A list of headers to apply to all outgoing data (traces, metrics, and logs).
+在所有输出数据(traces, metrics, and logs)上添加的header列表。
 
-**Default value:** N/A
+**默认值:** N/A
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_HEADERS="api-key=key,other-config-value=value"`
 
 ### `OTEL_EXPORTER_OTLP_TRACES_HEADERS`
 
-A list of headers to apply to all outgoing traces.
+在输出trace上的添加的header列表
 
-**Default value:** N/A
+**默认值:** N/A
 
-**Example:**
+**示例:**
 
-`export
-OTEL_EXPORTER_OTLP_TRACES_HEADERS="api-key=key,other-config-value=value"`
+`export OTEL_EXPORTER_OTLP_TRACES_HEADERS="api-key=key,other-config-value=value"`
 
 ### `OTEL_EXPORTER_OTLP_METRICS_HEADERS`
 
-A list of headers to apply to all outgoing metrics.
+在输出metrics上的添加的header列表
 
-**Default value:** N/A
+**默认值:** N/A
 
-**Example:**
+**示例:**
 
-`export
-OTEL_EXPORTER_OTLP_METRICS_HEADERS="api-key=key,other-config-value=value"`
+`export OTEL_EXPORTER_OTLP_METRICS_HEADERS="api-key=key,other-config-value=value"`
 
 ### `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
 
-A list of headers to apply to all outgoing logs.
+在输出logs上的添加的header列表
 
-**Default value:** N/A
+**默认值:** N/A
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_LOGS_HEADERS="api-key=key,other-config-value=value"`
 
 ## Timeout Configuration
 
-The following environment variables configure the maximum time (in milliseconds)
-an OTLP Exporter will wait before transmitting the net batch of data.
+通过下面的环境变量，配置OTLP exporter在发送网络数据批之前，等待的最大时间（单位毫秒）。
 
 ### `OTEL_EXPORTER_OTLP_TIMEOUT`
 
-The timeout value for all outgoing data (traces, metrics, and logs) in milliseconds.
+所有输出数据(traces, metrics, and logs)的超时时间，单位毫秒。
 
-**Default value:** `10000` (10s)
+**默认值:** `10000` (10s)
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_TIMEOUT=500`
 
 ### `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT`
 
-The timeout value for all outgoing traces in milliseconds.
+所有输出traces数据的超时时间，单位毫秒。
 
-**Default value:** 10000 (10s)
+**默认值:** 10000 (10s)
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_TRACES_TIMEOUT=500`
 
 ### `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT`
 
-The timeout value for all outgoing metrics in milliseconds.
+所有输出metrics数据的超时时间，单位毫秒。
 
-**Default value:** 10000 (10s)
+**默认值:** 10000 (10s)
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_METRICS_TIMEOUT=500`
 
 ### `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
 
-The timeout value for all outgoing logs in milliseconds.
+所有输出logs数据的超时时间，单位毫秒。
 
-**Default value:** 10000 (10s)
+**默认值:** 10000 (10s)
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_LOGS_TIMEOUT=500`
 
 ### `OTEL_EXPORTER_OTLP_PROTOCOL`
 
-Specifies the OTLP transport protocol to be used for all telemetry data.
+指定远程监测数据使用的OTLP传输协议。
 
-**Default value:** SDK-dependent, but will typically be either `http/protobuf` or `grpc`.
+**默认值:** 依赖于SDK，但是通常是 `http/protobuf` 或 `grpc`
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_PROTOCOL=grpc`
 
-Valid values are:
+有效值，如下:
 
 * `grpc` to use OTLP/gRPC
 * `http/protobuf` to use OTLP/HTTP+protobuf
@@ -189,15 +176,15 @@ Valid values are:
 
 ### `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`
 
-Specifies the OTLP transport protocol to be used for trace data.
+指定trace使用的OTLP传输协议
 
-**Default value:** SDK-dependent, but will typically be either `http/protobuf` or `grpc`.
+**默认值:** 依赖于SDK，但是通常是 `http/protobuf` 或 `grpc`
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=grpc`
 
-Valid values are:
+有效值，如下:
 
 * `grpc` to use OTLP/gRPC
 * `http/protobuf` to use OTLP/HTTP+protobuf
@@ -205,15 +192,15 @@ Valid values are:
 
 ### `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`
 
-Specifies the OTLP transport protocol to be used for metrics data.
+指定metrics使用的OTLP传输协议
 
-**Default value:** SDK-dependent, but will typically be either `http/protobuf` or `grpc`.
+**默认值:** SDK-dependent, but will typically be either `http/protobuf` or `grpc`.
 
-**Example:**
+**示例:**
 
 `export OTEL_EXPORTER_OTLP_METRICS_PROTOCOL=grpc`
 
-Valid values are:
+有效值，如下:
 
 * `grpc` to use OTLP/gRPC
 * `http/protobuf` to use OTLP/HTTP+protobuf
