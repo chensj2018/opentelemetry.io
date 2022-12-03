@@ -1,261 +1,202 @@
 ---
 title: Glossary
 description: >-
- Terminology you may or may not be familiar with used by the OpenTelemetry project
+ OpenTelemetry项目使用的术语
 weight: 100
 ---
+OpenTelemetry项目使用的术语，你也许熟悉或者不熟悉。
+另外，项目也许定义的术语含义和其他地方不同。本章罗列了项目中使用的术语以及其含义。
 
-The OpenTelemetry project uses terminology you may or may not be familiar with.
-In addition, the project may define the terminology in a different way than
-others. This page captures terminology used in the project and what it means.
-
-## Generic Terminology
+## 通用术语
 
 ### **Aggregation**
 
-The process of combining multiple measurements into exact or estimated
-statistics about the measurements that took place during an interval of time,
-during program execution. Used by the [`Metric`](#metric)
-[`Data Source`](#data-source).
+在程序执行期间，综合一段时间间隔内的产生的多项指标监测数据，得到精确或估计的统计值。该值被[`Metric`](#metric) [`Data Source`](#data-source)使用。
 
 ### **API**
 
-Application Programming Interface. In the OpenTelemetry project, used to define
-how telemetry data is generated per [`Data Source`](#data-source).
+应用程序接口。在OpenTelemetry项目中，被用于定义[`Data Source`](#data-source)如何产生远程监测数据。
 
 ### **Application**
 
-One or more [`Services`](#service) designed for end users or other applications.
+为终端用户或其他应用设计的一个或多个[`Services`](#service) 。
 
 ### **APM**
 
-Application Performance Monitoring is about monitoring software applications, their performance (speed, reliability, availability, etc.) to detect issues, alerting and tooling for finding the root cause.
+Application Performance Monitoring是用于监测软件应用程序的性能（速度、可靠性、可用性等），以便发现问题、产生告警和定位问题根本原因。
 
 ### **Attribute**
 
-A key-value pair. Used across telemetry signals - e.g. in [`Traces`](#trace) to
-attach data to a [`Span`](#span), or in [`Metrics`](#metric). See [attribute
-spec][attribute].
+一个A key-value键值对。用于跨越远程监控signals。例如，在[`Traces`](#trace)的[`Span`](#span)中附加数据,或者在 [`Metrics`](#metric)。参见[attribute][attribute]。
 
 ### **Automatic Instrumentation**
 
-Refers to telemetry collection methods that do not require the end-user to
-modify application's source code. Methods vary by programming language, and
-examples include bytecode injection or monkey patching.
+是指收集远程监测数据的方法，该方法不需要终端用户修改应用程序的代码。不同的编程语言这些方法有很大的不同，例如包括字节码注入或者monkey patching。
 
 ### **Baggage**
 
-A mechanism for propagating name/value pairs to help establish a causal
-relationship between events and services. See [baggage spec][baggage].
+传播name/value键值对的机制，用于在event和service之间建立因果关系，参见[baggage spec][baggage]。
 
 ### **Client Library**
 
-See [`Instrumented Library`](#instrumented-library).
+参见[`Instrumented Library`](#instrumented-library)。
 
 ### **Client-side App**
 
-A component of an [`Application`](#application) that is not running inside a
-private infrastructure and is typically used directly by end-users. Examples of
-client-side apps are browser apps, mobile apps, and apps running on IoT devices.
+[`Application`](#application)的一个组件，一般情况由终端用户直接使用。例如，浏览器app、移动端app或运行在IoT设备上的app。
 
 ### **Collector**
 
-A vendor-agnostic implementation on how to receive, process, and export
-telemetry data. A single binary that can be deployed as an agent or gateway.
+如何接收、处理和导出远程监测数据的实现方式，并且这种实现方式是与厂商无关的。是一个单一的二进制包，可以部署为agent或gateway。
 
-Also known as the OpenTelemetry Collector. More on the Collector
-[here][collector].
+也被称为OpenTelemetry Collector，有关Collector的更多信息请参阅[这里][collector]。
 
 ### **Contrib**
 
-Several [`Instrumentation Libraries`](#instrumentation-library) and the
-[`Collector`](#collector) offer a set of core capabilities as well as a
-dedicated contrib repository for non-core capabilities including vendor
-`Exporters`.
+数个[`指标监测库`](#instrumentation-library)和[`Collector`](#collector)，提供一套核心能力以及包括商业 `Exporter`的非核心代码库。
 
 ### **Context Propagation**
 
-Allows all [`Data Sources`](#data-source) to share an underlying context
-mechanism for storing state and accessing data across the lifespan of a
-[`Transaction`](#transaction). See [context propagation
-spec][context propagation].
+允许所有[`Data Sources`](#data-source)为了存储状态和跨[`Transaction`](#transaction)生命周期访问数据，分享上下文的机制。参见[context propagation][context propagation]。
 
 ### **DAG**
 
-[Directed Acyclic Graph][dag].
+有向无环图[Directed Acyclic Graph][dag].
 
 ### **Data Source**
 
-See [`Signal`](#signal)
+参见 [`Signal`](#signal)
 
 ### **Dimension**
 
-See [`Label`](#label).
+参见 [`Label`](#label).
 
 ### **Distributed Tracing**
 
-Tracks the progression of a single [`Request`](#request), called a
-[`Trace`](#trace), as it is handled by [`Services`](#service) that make up an
-[`Application`](#application). A [`Distributed Trace`](#distributed-tracing)
-transverses process, network and security boundaries.
+跟踪单一 ` Request`的流程称之为 ` Trace`，它由组成 `Application`的 `Services`处理。一个分布式trace跨越了进程、网络和安全边界。
 
-More on Distributed Tracing [here][distributed tracing].
+有关分布式tracing的更多信息，请点击[这里][distributed tracing]。
 
 ### **Event**
 
-Something that happened where representation depends on the
-[`Data Source`](#data-source). For example, [`Spans`](#span).
+表示在[`Data Source`](#data-source)上发生的事情. 例如, [`Spans`](#span).
 
 ### **Exporter**
 
-Provides functionality to emit telemetry to consumers. Used by
-[`Instrumentation Libraries`][spec-exporter-lib] and the
-[`Collector`](/docs/collector/configuration#basics). Exporters can be push- or
-pull-based.
+为消费者提供发送远程监测数据的功能。被[`指标监测库`](#instrumentation-library)和[`Collector`](#collector)使用。 Exporters支持push和pull两种方式。
 
 ### **Field**
 
-Name/value pairs added to [`Log Records`](#log-record) (similar to
-[`Attributes`](#attribute) for [`Spans`](#span) and [`Labels`](#label) for
-[`Metrics`](#metric)). See [field spec][field].
+添加到[`Log Records`](#log-record)上的Name/value键值对 (类似于[`Spans`](#span)的
+[`Attributes`](#attribute)和[`Metrics`](#metric)的[`Labels`](#label)。参见[field spec][field].
 
 ### **gRPC**
 
-A high-performance, open source universal [`RPC`](#rpc) framework. More on gRPC
-[here](https://grpc.io).
+高性能，开源的通用[`RPC`](#rpc)框架。更多gRPC信息，请点击[这里](https://grpc.io)。
 
 ### **HTTP**
 
-Short for [Hypertext Transfer Protocol][http].
+[Hypertext Transfer Protocol][http]的缩写。
 
 ### **Instrumented Library**
 
-Denotes the [`Library`](#library) for which the telemetry signals
-([`Traces`](#trace), [`Metrics`](#metric), [`Logs`](#log)) are gathered. See
-[more][spec-instrumented-lib].
+表示采集远程监测signals([`Traces`](#trace), [`Metrics`](#metric), [`Logs`](#log))的[`Library`](#library)。 更多信息[参见][spec-instrumented-lib]。
 
 ### **Instrumentation Library**
 
-Denotes the [`Library`](#library) that provides the instrumentation for a given
-[`Instrumented Library`](#instrumented-library).
-[`Instrumented Library`](#instrumented-library) and
-[`Instrumentation Library`](#instrumentation-library) may be the same
-[`Library`](#library) if it has built-in OpenTelemetry instrumentation. See
-[more][spec-instrumentation-lib].
+表示为指定[`Instrumented Library`](#instrumented-library)提供指标采集的[`Library`](#library)。如果是内嵌在OpenTelemetry instrumentation内，[`Instrumented Library`](#instrumented-library)和[`Instrumentation Library`](#instrumentation-library) 也许是相同的[`Library`](#library)。更多信息[参见][spec-instrumentation-lib]。
 
 ### **JSON**
 
-Short for [JavaScript Object Notation][json].
+[JavaScript Object Notation][json]的缩写。
 
 ### **Label**
 
-See [Attribute](#attribute).
+参见[Attribute](#attribute).
 
 ### **Language**
 
-Programming Language.
+编程语言。
 
 ### **Library**
 
-A language-specific collection of behavior invoked by an interface.
+使用明确的编程语言，对接口的实现集合。
 
 ### **Log**
 
-Sometimes used to refer to a collection of [`Log Records`](#log-record). May be
-ambiguous, since people also sometimes use [`Log`](#log) to refer to a single
-[`Log Record`](#log-record), thus this term should be used carefully and in the
-context where ambiguity is possible additional qualifiers should be used (e.g.
-`Log Record`). See [more][log].
+有时指[`Log Records`](#log-record)的集合，有时指单个[`Log Record`](#log-record)。因此这个术语要谨慎使用，在可能引起歧义的场景，应该添加限定词(例如 `Log Record`)。更多信息，[参见][log]。
 
 ### **Log Record**
 
-A recording of an [`Event`](#event). Typically the record includes a timestamp
-indicating when the [`Event`](#event) happened as well as other data that
-describes what happened, where it happened, etc. See [more][log record].
+一个[`Event`](#event)记录。通常包括表示[`Event`](#event)何时发生的时间戳和描述发生了什么、在哪发生等信息的其他数据。更多信[参见][log record]。
 
 ### **Metadata**
 
-A name/value pair added to telemetry data. OpenTelemetry calls this
-[`Attributes`](#attribute) on [`Spans`](#span), [`Labels`](#label) on
-[`Metrics`](#metric) and [`Fields`](#field) on [`Logs`](#log).
+添加到远程监测数据上的name/value键值对。OpenTelemetry在[`Spans`](#span)上称之为[`Attributes`](#attribute)，在[`Metrics`](#metric)上称之为[`Labels`](#label)，在[`Logs`](#log)上称之为[`Fields`](#field)。
 
 ### **Metric**
 
-Records a data point, either raw measurements or predefined aggregation, as
-time series with [`Metadata`](#metadata). See [more][metric].
+记录一个数据点，可表示原始测量值或预定义聚合后的值，看作一个带有 [`Metadata`](#metadata)信息的时间序列。更多信息，[参见][metric].
 
 ### **OC**
 
-Short form for [`OpenCensus`](#opencensus).
+[`OpenCensus`](#opencensus)的缩写。
 
 ### **OpenCensus**
 
-A set of libraries for various languages that allow you to collect application
-metrics and distributed traces, then transfer the data to a backend of your
-choice in real time.
-[Precursor to OpenTelemetry](/docs/concepts/what-is-opentelemetry/#so-what). See
-[more][opencensus].
+各种编程语言的一组库，用于收集应用程序的metric和分布式trace，然后将其发送到你选择的back-end。
+[OpenTelemetry的前身](/docs/concepts/what-is-opentelemetry/#so-what)，更多信息，[参见][opencensus]。
 
 ### **OpenTracing**
 
-Vendor-neutral APIs and instrumentation for distributed tracing.
-[Precursor to OpenTelemetry](/docs/concepts/what-is-opentelemetry/#so-what). See
-[more][opentracing].
+厂商中立的APIs和分布式tracing的instrumentation 。
+[OpenTelemetry的前身](/docs/concepts/what-is-opentelemetry/#so-what)。更多信息，[参见][opentracing].
 
 ### **OT**
 
-Short form for [`OpenTracing`](#opentracing).
+[`OpenTracing`](#opentracing)的缩写。
 
 ### **OTel**
 
-Short form for [OpenTelemetry](/docs/concepts/what-is-opentelemetry).
+[OpenTelemetry](/docs/concepts/what-is-opentelemetry)的缩写。
 
 ### **OTelCol**
 
-Short form for [OpenTelemetry Collector](#collector).
+[OpenTelemetry Collector](#collector)的缩写。
 
 ### **OTLP**
 
-Short for
-[OpenTelemetry Protocol](/docs/reference/specification/protocol/otlp/).
+[OpenTelemetry Protocol](/docs/reference/specification/protocol/otlp/)的缩写。
 
 ### **Processor**
 
-Operation performed on data between being received and being exported. For
-example, batching. Used by
-['Instrumentation Libraries'](#instrumentation-library) and the
-[Collector](/docs/collector/configuration/#processors).
+在接收和导出之间，对数据执行的操作。例如，批处理。被
+[&#39;Instrumentation Libraries&#39;](#instrumentation-library) 和
+[Collector](/docs/collector/configuration/#processors)使用。
 
 ### **Propagators**
 
-Used to serialize and deserialize specific parts of telemetry data such as span
-context and [`Baggage`](#baggage) in [`Spans`](#span). See [more][propagators].
+用于序列化和反序列化远程监测数据的特定部分，例如 [`Spans`](#span)的上下文和[`Baggage`]。更多信息，[参见][propagators].
 
 ### **Proto**
 
-Language independent interface types. See [more][proto].
+与编程语言无关的接口类型。更多信息，[参见][proto]。
 
 ### **Receiver**
 
-Term used by the [`Collector`](/docs/collector/configuration/#receivers) to
-define how telemetry data is received. Receivers can be push- or pull-based. See
-[more][receiver].
+[`Collector`](/docs/collector/configuration/#receivers)使用的术语，定义远程遥测数据如何被接收。Receivers可以是push或pull。更多信息，[参见][receiver]。
 
 ### **Request**
 
-See [`Distributed Tracing`](#distributed-tracing).
+参见[`Distributed Tracing`](#distributed-tracing).
 
 ### **Resource**
 
-Captures information about the entity for which telemetry is recorded. For
-example, a process producing telemetry that is running in a container on
-Kubernetes has a pod name, it is in a namespace and possibly is part of a
-deployment which also has a name. All three of these attributes can be included
-in the `Resource` and applied to any data source.
+捕获有关记录远程监测实体的信息。例如，一个运行在kubernetes容器上的被远程监测的进程，有一个pod名字，在一个namespace里，也许还属于一个deployment，这个deployment也有名字。这三个属性值被包含在 `Resource`内，并被应用到data source上。
 
 ### **REST**
 
-Short for [Representational State Transfer][rest].
+[Representational State Transfer][rest]缩写。
 
 ### **RPC**
 
@@ -263,75 +204,63 @@ Short for [Remote Procedure Call][rpc].
 
 ### **Sampling**
 
-A mechanism to control the amount of data exported. Most commonly used with the
-[`Tracing`](#trace) [`Data Source`](#data-source). See [more][sampling].
+控制数据导出数量的机制。最常见的用法是和[`Tracing`](#trace) [`Data Source`](#data-source)一起使用。更多信息[参见][sampling].
 
 ### **SDK**
 
-Short for Software Development Kit. Refers to a telemetry SDK that denotes a
-[`Library`](#library) that implement the OpenTelemetry [`API`](#api).
+Software Development Kit的缩写。指telemetry SDK，表示实现 OpenTelemetry [`API`](#api)的[`Library`](#library)。
 
 ### **Semantic Conventions**
 
-Defines standard names and values of [`Metadata`](#metadata) in order to provide
-vendor-agnostic telemetry data.
+为了提供厂商中立的远程监测数据，而定义的[`Metadata`](#metadata)标准名字和取值。
 
 ### **Service**
 
-A component of an [`Application`](#application). Multiple instances of a
-[`Service`](#service) are typically deployed for high availability and
-scalability. A [`Service`](#service) may be deployed in multiple locations.
+[`Application`](#application)的一个组件。为了高可用和扩展通常一个[`Service`](#service)部署多个实例。[`Service`](#service)也许被部署到多个位置。
 
 ### **Signal**
 
-One of [`Traces`](#trace), [`Metrics`](#metric) or [`Logs`](#log). More on
-Signals [here][signals].
+[`Traces`](#trace), [`Metrics`](#metric) 或 [`Logs`](#log)之一。更多有关Signals的信息，请查看[这里][signals]。
 
 ### **Span**
 
-Represents a single operation within a [`Trace`](#trace). See [more][span].
+表示 [`Trace`](#trace)里的一个操作。更多信息，[参见][span].
 
 ### **Span Link**
 
-A span link is a link between causally-related spans. For details see
-[Links between spans](/docs/reference/specification/overview#links-between-spans)
-and
-[Specifying Links](/docs/reference/specification/trace/api#specifying-links).
+有因果关系的span之间的链接。更多信息，请参考[Links between spans](/docs/reference/specification/overview#links-between-spans)
+和
+[Specifying Links](/docs/reference/specification/trace/api#specifying-links)。
 
 ### **Specification**
 
-Describes the cross-language requirements and expectations for all
-implementations. See [more][specification].
+描述对所有实现跨编程语言的需求和期望。[参见][specification].
 
 ### **Status**
 
-The result of the operation. Typically used to indicate whether an error
-occurred. See [more][status].
+操作的结果。通常用于指示是否发生错误。[参见][status].
 
 ### **Tag**
 
-See [`Metadata`](#metadata).
+参考[`Metadata`](#metadata).
 
 ### **Trace**
 
-A [`DAG`](#dag) of [`Spans`](#span), where the edges between [`Spans`](#span)
-are defined as parent/child. relationship. See [more][trace].
+一个[`Spans`](#span)的[`DAG`](#dag), 边是由parent/child定义。[参见][trace].
 
 ### **Tracer**
 
-Responsible for creating [`Spans`](#span). See [more][tracer].
+负责创建[`Spans`](#span)。[参见][tracer].
 
 ### **Transaction**
 
-See [`Distributed Tracing`](#distributed-tracing).
+参见[`Distributed Tracing`](#distributed-tracing).
 
 ### **zPages**
 
-An in-process alternative to external exporters. When included, they collect and
-aggregate tracing and metrics information in the background; this data is served
-on web pages when requested. See [more][zpages].
+进程内置的exporter。当被包含到开发代码中，它将在后台收集和聚集tracing和metrics信息。这些信息服务于网页请求。更多信息[参阅][zpages]。
 
-## Additional Terminology
+## 其他术语
 
 ### Traces
 
@@ -364,8 +293,7 @@ on web pages when requested. See [more][zpages].
 [baggage]: /docs/reference/specification/baggage/api/
 [attribute]: /docs/reference/specification/common/#attributes
 [collector]: /docs/collector
-[context propagation]:
-  /docs/reference/specification/overview#context-propagation
+[context propagation]: /docs/reference/specification/overview#context-propagation
 [dag]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 [distributed tracing]: /docs/concepts/signals/traces/
 [field]: /docs/reference/specification/logs/data-model#field-kinds
@@ -386,13 +314,10 @@ on web pages when requested. See [more][zpages].
 [span]: /docs/reference/specification/trace/api#span
 [spans]: /docs/reference/specification/trace/api#add-events
 [spec-exporter-lib]: /docs/reference/specification/glossary/#exporter-library
-[spec-instrumentation-lib]:
-  /docs/reference/specification/glossary/#instrumentation-library
-[spec-instrumented-lib]:
-  /docs/reference/specification/glossary/#instrumented-library
+[spec-instrumentation-lib]: /docs/reference/specification/glossary/#instrumentation-library
+[spec-instrumented-lib]: /docs/reference/specification/glossary/#instrumented-library
 [specification]: /docs/concepts/components/#specification
 [status]: /docs/reference/specification/trace/api#set-status
 [trace]: /docs/reference/specification/overview#traces
 [tracer]: /docs/reference/specification/trace/api#tracer
-[zpages]:
-  https://github.com/open-telemetry/opentelemetry-specification/blob/main/experimental/trace/zpages.md
+[zpages]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/experimental/trace/zpages.md
