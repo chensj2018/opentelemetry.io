@@ -2,21 +2,13 @@
 title: Getting Started
 weight: 2
 ---
+欢迎来到OpenTelemetry C++开始指南！将引导你完成基本步骤：安装、指标监测、配置和从OpenTelemetry导出数据。
 
-Welcome to the OpenTelemetry C++ getting started guide! This guide will walk you
-through the basic steps in installing, instrumenting with, configuring, and
-exporting data from OpenTelemetry.
+可以使用[CMake](https://cmake.org/) 或 [Bazel](https://bazel.build/) 编译OpenTelemetry C++。接下来指南在将使用CMake，提供让应用程序（一个http server和http client）运行的最基本的步骤。更多信息，请参阅[these instructions](https://github.com/open-telemetry/opentelemetry-cpp/blob/main/INSTALL.md)。
 
-You can use [CMake](https://cmake.org/) or [Bazel](https://bazel.build/) for
-building OpenTelemetry C++. The following getting started guide will make use of
-CMake and only provide you the most essential steps to have a working example
-application (a http server & http client). For more details read
-[these instructions](https://github.com/open-telemetry/opentelemetry-cpp/blob/main/INSTALL.md).
+## 先决条件
 
-## Prerequisites
-
-You can build OpenTelemetry C++ on Windows, macOS or Linux. First you need to
-install some dependencies:
+在Windows, macOS 或 Linux编译OpenTelemetry C++。 首先需要安装如下依赖：
 
 {{< ot-tabs "Linux (apt)" "Linux (yum)" "MacOS (homebrew)">}}
 {{< ot-tab lang="shell">}}
@@ -32,16 +24,15 @@ $ brew install git cmake
 {{< /ot-tab >}}
 {{< /ot-tabs >}}
 
-## Building
+## 编译
 
-Get the opentelementry-cpp source:
+获取opentelementry-cpp源码:
 
 ```shell
 $ git clone --recursive https://github.com/open-telemetry/opentelemetry-cpp
 ```
 
-Navigate to the repository cloned above, and create the CMake build
-configuration:
+导航到上面克隆的仓库上，创建CMake编译配置：
 
 ```shell
 $ cd opentelemetry-cpp
@@ -49,31 +40,29 @@ $ mkdir build && cd build
 $ cmake -DBUILD_TESTING=OFF ..
 ```
 
-Once build configuration is created, build the CMake targets `http_client` and
-`http_server`:
+配置文件创建之后，编译CMake工程，生成 `http_client` 和 `http_server`:
 
 ```shell
 cmake --build . --target http_client http_server
 ```
 
-If all goes well, you should find binaries `http_server` and `http_client` in
-`./examples/http`:
+完成之后在 ` ./expamples/http`目录下，可以找到二进制执行文件： `http_server `and `http_client `
 
 ```shell
 $ ls ./examples/http
 CMakeFiles  Makefile  cmake_install.cmake  http_client  http_server
 ```
 
-## Run Application
+## 运行应用程序
 
-Open two terminals, in the first terminal, start the http server:
+打开两个终端，第一运行http server：
 
 ```shell
 $ ./examples/http/http_server
 Server is running..Press ctrl-c to exit..
 ```
 
-In the other terminal, run the http client:
+另外一个，一下http client：
 
 ```shell
 $ ./examples/http/http_client
@@ -109,7 +98,7 @@ $ ./examples/http/http_client
 }
 ```
 
-Also the server should dump you a trace to the console:
+在server端，trace被输出到了控制台：
 
 ```shell
 {
@@ -149,12 +138,8 @@ Also the server should dump you a trace to the console:
 }
 ```
 
-## What's next
+## 接下来做什么
 
-Enrich your instrumentation generated automatically with
-[manual](/docs/instrumentation/cpp/manual) of your own codebase. This gets you
-customized observability data.
+在代码中使用[手动](/docs/instrumentation/cpp/manual)的方式，丰富自动生成的监测指标。这将得到自定义的可观测数据。
 
-You'll also want to configure an appropriate exporter to
-[export your telemetry data](/docs/instrumentation/cpp/exporters) to one or more
-telemetry backends.
+也许你想配置一个适当的exporter，将[远程监测数据导出](/docs/instrumentation/cpp/exporters)到一个或多个遥测的back-end。
